@@ -1,0 +1,82 @@
+version: '3.1'
+intents:
+- agradecimento
+- descricao_item
+- id_pedido
+- pedido_comida
+- saudacao
+- status
+- afirmacao
+- negacao
+- info_endereco
+entities:
+- num_pedido
+- sabor
+- borda
+- qtde
+slots:
+  pedido_pizza:
+    type: list
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: sabor
+  num_pedido_cliente:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: num_pedido
+  endereco_cliente:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_text
+      intent: info_endereco
+  qtde_pizzas:
+    type: list
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: qtde
+  num_pedido_db:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: custom
+
+forms: 
+  pizzaria_form:
+    required_slots:
+      - pedido_pizza
+      - endereco_cliente
+responses:
+  utter_saudacao:
+  - text: Olá e seja bem vindo! Como posso ajudá-lo?
+  utter_ask_pizzaria_form_pedido_pizza:
+  - text: Certo, o que você gostaria de pedir hoje conosco?
+  utter_info_pedido:
+  - text: "Anotei tudo aqui, você deseja comprar as seguintes pizzas:"
+  utter_status:
+  - text: Você poderia me informar o código do seu pedido?
+  utter_id_pedido:
+  - text: Seu pedido {num_pedido_cliente} está a caminho
+  utter_agradecimento:
+  - text: Obrigado pela cooperação e conte sempre conosco
+  utter_reformular:
+  - text: Me desculpe, você pode reformular a frase?
+  utter_default:
+  - text: Desculpe não estou entendendo o que vc quer. Favor, reformular suas frases.
+  utter_ask_pizzaria_form_endereco_cliente:
+  - text: Me informe seu endereço completo, por favor
+  utter_finalizacao_pedido:
+  - text: Seu pedido foi devidamente registrado no código {num_pedido_db}. Obrigado pela preferência.
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+actions:
+- action_reset_slots
+- action_sabores_pizza
+- action_salvar_pedido
+- action_resetar_slots
